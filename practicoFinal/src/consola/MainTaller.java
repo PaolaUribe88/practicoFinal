@@ -1,4 +1,11 @@
 package consola;
+/**
+ * Esta clase main
+ * 
+ * @creado en Eclipse
+ * @author Jessie Uribe 
+ *
+ */
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -8,6 +15,7 @@ import practicoMyCar.Vehiculo;
 import practicoMyCar.Cliente;
 import practicoMyCar.Mantencion;
 import practicoMyCar.Validacion;
+
 
 public class MainTaller {
 		//SE FUERZA UNA HERENCIA EN LA CLASE VEHICULO EXTENDS DE FECHA 
@@ -46,7 +54,7 @@ public class MainTaller {
 				System.out.println("[5.] AGREGAR MANTENCION ");
 				System.out.println("[0.] SALIR ");
 				System.out.println("==================================\n");
-				System.out.println("[Seleccione su opción]\n");
+				System.out.println("[Seleccione su opciÃ³n]\n");
 					        
 				// Toma un int del usuario, si esta entre las opciones, hara lo que corresponda, sino, volvera a pedir.
 	     			opcion = scanner.nextInt();
@@ -80,6 +88,12 @@ public class MainTaller {
 	}
 	
 		private static void agregarMantencion() {
+		/**
+		 * 
+		 * Este metodo que registra la mantencion de vehiculos
+		 * 
+		 * @return informacion de mantenciones 
+		 */
 			
 		// MUESTRA AUTOS REGISTRADOS Y SUS DATOS
 				System.out.println("AUTOS REGISTRADOS");
@@ -89,7 +103,7 @@ public class MainTaller {
 					System.out.println("MARCA AUTO: "+vehiculo.getMarca());
 					System.out.println("MODELO AUTO: "+vehiculo.getModelo());
 					System.out.println("FABRICACION AUTO: "+vehiculo.getFecha());
-					System.out.println("DUEÑO AUTO: "+vehiculo.getPoseedor().getNombres()+" "+vehiculo.getPoseedor().getApellidos());
+					System.out.println("DUEÃ‘O AUTO: "+vehiculo.getPoseedor().getNombres()+" "+vehiculo.getPoseedor().getApellidos());
 					System.out.println("=======================================\n");
 				}
 				
@@ -139,7 +153,7 @@ public class MainTaller {
 		// Por cada mantencion realizada, muestra los datos en la consola
 		for(Mantencion mantencion : mantenciones) {
 			System.out.println("PPU AUTO MANTENIDO: "+mantencion.getVehiculo().getPpu());
-			System.out.println("DUEÑO DE AUTO MANTENIDO: "+mantencion.getVehiculo().getPoseedor().getNombres()+" "+mantencion.getVehiculo().getPoseedor().getApellidos());
+			System.out.println("DUEÃ‘O DE AUTO MANTENIDO: "+mantencion.getVehiculo().getPoseedor().getNombres()+" "+mantencion.getVehiculo().getPoseedor().getApellidos());
 			System.out.println("TIPO MANTENCION: "+mantencion.getMantencionRealizada());
 			System.out.println("OBSERVACIONES: "+mantencion.getObservaciones());
 			System.out.println("MONTO: "+mantencion.getMontoServicio());
@@ -153,6 +167,12 @@ public class MainTaller {
 		
 	}
 	private static void agregarCliente() {
+         /**
+	 * 
+	 * Este metodo solicita informacion al usuario para crear registro 
+	 * 
+	 * 
+	 */
 		scanner.nextLine(); //ATAJA ERRORES
 		
 		//PIDE DATOS CLIENTE
@@ -189,15 +209,15 @@ public class MainTaller {
 			System.out.println("Ingrese MODELO del Vehiculo");
 			String modeloAuto = scanner.nextLine();
 			
-			System.out.println("Ingrese AÑO de Fabricacion del Vehiculo");
+			System.out.println("Ingrese AÃ‘O de Fabricacion del Vehiculo");
 			int yearAuto = scanner.nextInt();
 						
 			Vehiculo vehiculo = new Vehiculo(ppuAuto,marcaAuto,modeloAuto,LocalDate.of(yearAuto, 01, 01),cliente);
-			vehiculos.add(vehiculo); // AÑADE AL ARRAY PARA USO FUTURO
+			vehiculos.add(vehiculo); // AÃ‘ADE AL ARRAY PARA USO FUTURO
 			
 			scanner.nextLine(); // ATAJA ERRORES
 			
-			System.out.println("¿Desea seguir añadiendo Vehiculos? (si/no)");
+			System.out.println("Â¿Desea seguir aÃ±adiendo Vehiculos? (si/no)");
 			String decision = scanner.nextLine();
 			
 			if(decision.equalsIgnoreCase("NO")) {
