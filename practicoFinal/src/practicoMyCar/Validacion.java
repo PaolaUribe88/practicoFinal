@@ -1,7 +1,10 @@
 package practicoMyCar;
 
 import java.time.LocalDate;
+
 import practicoMyCar.Cliente;
+import practicoMyCar.Fecha;
+import practicoMyCar.Vehiculo;
 
 public class Validacion {
 	
@@ -34,5 +37,16 @@ public class Validacion {
 			System.out.println("Telefono Incorrecto");
 		}
 	}
-
+	public class ValidacionesEmail{
+		//Clase helper clase ayuda
+		public static boolean emailValido(String email) {
+			String emailLimpio = email.strip();
+			
+			String regexEmail1="^[a-zA-Z0-9_.]+@[a-zA-Z0-9_]+\\.(cl|com|es)$";//EXPRESION REGULAR
+			
+			
+			return emailLimpio.matches(regexEmail1);
+		}
+	}
 }
+
