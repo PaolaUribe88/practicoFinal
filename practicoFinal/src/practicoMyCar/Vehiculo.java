@@ -7,7 +7,7 @@ public class Vehiculo extends Fecha {
 	private String marca;
 	private String modelo;
 	private LocalDate fecha;
-	
+	private boolean mantenido;
 	//AUTO SOLO PERTENECE A 1 CLIENTE
 	private Cliente poseedor;
 	
@@ -16,16 +16,16 @@ public class Vehiculo extends Fecha {
 		
 	}
 
-	
-	public Vehiculo(String ppu, String marca, String modelo, LocalDate fecha, Cliente poseedor) {
+	public Vehiculo(String ppu, String marca, String modelo, LocalDate fecha, boolean mantenido, Cliente poseedor) {
 		super();
 		this.ppu = ppu;
 		this.marca = marca;
 		this.modelo = modelo;
 		this.fecha = fecha;
-		this.setPoseedor(poseedor);
+		this.poseedor= poseedor;
+		this.setMantenido(mantenido);
 	}
-
+	
 	public String getPpu() {
 		return ppu;
 	}
@@ -66,7 +66,14 @@ public class Vehiculo extends Fecha {
 		this.poseedor = poseedor;
 	}
 	
-	
+	public boolean isMantenido() {
+		return mantenido;
+	}
+
+	public void setMantenido(boolean mantenido) {
+		this.mantenido = mantenido;
+	}
 	
 
 }
+
