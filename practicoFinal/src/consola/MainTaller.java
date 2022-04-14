@@ -6,8 +6,9 @@ package consola;
  * @author Jessie Uribe 
  *
  */
-
+import java.lang.reflect.Array;
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +16,6 @@ import practicoMyCar.Vehiculo;
 import practicoMyCar.Cliente;
 import practicoMyCar.Mantencion;
 import practicoMyCar.Validacion;
-
 
 public class MainTaller {
 		//SE FUERZA UNA HERENCIA EN LA CLASE VEHICULO EXTENDS DE FECHA 
@@ -27,17 +27,18 @@ public class MainTaller {
 		private static ArrayList<Vehiculo> vehiculos = new ArrayList<>();
 		private static ArrayList<Mantencion> mantenciones = new ArrayList<>();
 		private static ArrayList<Validacion> validaciones = new ArrayList<>();
-		
+		private static ArrayList<Cliente> clientes = new ArrayList<>();
 		// constantes para el menu
 		public final static int OPCION_MENU_AGREGAR_CLIENTE = 1;
 		public final static int OPCION_MENU_ELIMINAR_CLIENTE = 2;
-		public final static int OPCION_MENU_LISTA_MANTENCIONES = 3;
-		public final static int OPCION_MENU_RECAUDACIONES = 4;
-		public final static int OPCION_MENU_AGREGAR_MANTENCIONES = 5;
+		public final static int OPCION_MENU_AGREGAR_MANTENCIONES = 3;
+		public final static int OPCION_MENU_LISTA_MANTENCIONES = 4;
+		public final static int OPCION_MENU_RECAUDACIONES = 5;
+		private final static int OPCION_MENU_VER_CLIENTES = 6;
 		public final static int OPCION_MENU_SALIR = 0;
     
 		public static void main(String[] args) {
-			//LLAMAMOS AL METODO QUE POSEE TODO EL 
+			//LLAMAMOS AL METODO QUE POSEE TODO EL EJERCICIO
 			menu();
 
 	}
@@ -49,9 +50,9 @@ public class MainTaller {
 				System.out.println("\nMENU TALLER MYCAR \n**********************");
 				System.out.println("[1.] AGREGAR CLIENTE ");
 				System.out.println("[2.] ELIMINAR CLIENTE ");
-				System.out.println("[3.] LISTA DE MANTENCIONES ");
-				System.out.println("[4.] VENTAS RECAUDADAS");
-				System.out.println("[5.] AGREGAR MANTENCION ");
+				System.out.println("[3.] AGREGAR MANTENCION ");
+				System.out.println("[4.] LISTA DE MANTENCIONES ");
+				System.out.println("[5.] VENTAS RECAUDADAS");
 				System.out.println("[0.] SALIR ");
 				System.out.println("==================================\n");
 				System.out.println("[Seleccione su opción]\n");
@@ -76,6 +77,9 @@ public class MainTaller {
 	     			case OPCION_MENU_AGREGAR_MANTENCIONES:
 	     					agregarMantencion();
 	     					break;
+	     			case OPCION_MENU_VER_CLIENTES:
+						verClientes();
+						break;		
 	     			case OPCION_MENU_SALIR:
 	     					System.out.println("Saliendo...");
 	     					break;
@@ -86,14 +90,22 @@ public class MainTaller {
 		}while(opcion!= OPCION_MENU_SALIR);
 					
 	}
-	
+		private static void verClientes() {
+			for (Cliente cliente : clientes) {		
+				System.out.printf("NOMBRE CLIENTE: %s %s%n"
+								+ "RUT CLIENTE: %s%n"
+								+ "FONO CLIENTE: %s%n"
+								+ "CORREO CLIENTE: %s%n"
+								+ "AUTOS REGISTRADOS: %n%n",
+								cliente.getNombres(), cliente.getApellidos(),
+								cliente.getRut(),
+								cliente.getFono(),
+								cliente.getCorreo());
+				
+				System.out.println(cliente.vehiculosCliente());
+			}	
+		}
 		private static void agregarMantencion() {
-		/**
-		 * 
-		 * Este metodo que registra la mantencion de vehiculos
-		 * 
-		 * @return informacion de mantenciones 
-		 */
 			
 		// MUESTRA AUTOS REGISTRADOS Y SUS DATOS
 				System.out.println("AUTOS REGISTRADOS");
@@ -133,18 +145,27 @@ public class MainTaller {
 				System.out.println("Escriba monto cobrado");
 				int montoMantencion = scanner.nextInt(); 
 				
-
 				//CREA EL OBJETO MANTENCION Y LO AGREGA A ARRALIST MANTENCIONES
 				Mantencion mantencion = new Mantencion(tipoMantencion,observacionesMantencion,montoMantencion,vehiculoMantencion);
 				mantenciones.add(mantencion);
 				
 			}
-
-			//TODO
 	
 	private static void verRecaudacion() {
-		System.out.println("");
-		
+		// Declara int para recaudaciones y autos mantenidos, aumentaran de valor por cada mantencion exitosa
+				int recaudaciones = 0;
+				int autosMantenidos = 0;
+				
+				for(Mantencion mantencion : mantenciones) {
+					recaudaciones += mantencion.getMontoServicio();
+					autosMantenidos++;
+				}
+				// Llama al metodo listarMantenciones para mostrar un listado de los autos a los que se les hizo mantencion
+				listaMantenciones();
+				System.out.printf("Recaudaciones totales: $%d%n "
+								+ "Autos mantenidos: %d %n%n",
+								recaudaciones,
+								autosMantenidos);		
 		}
 		
 	private static void listaMantenciones() {
@@ -163,69 +184,103 @@ public class MainTaller {
 
 	//TODO
 	private static void eliminarCliente() {
-		System.out.println("");
+			scanner.nextLine();
 		
+		   //Busca al cliente segun rut y si lo encuentra, elimina todos los autos asociados y luego al mismo cliente.
+		   //Pero si uno de los autos asociados ya ha pasado por mantencion, no elimina el auto en cuestion por motivos de registro.
+		   System.out.println("Escriba el rut del cliente a eliminar: ");
+		   String rut = scanner.nextLine();
+		
+		   for (Cliente cli : clientes) {
+			   if(rut.equalsIgnoreCase(cli.getRut())) {
+				
+				   for (Vehiculo vehiculo : vehiculos) {
+					   if(vehiculo.getPoseedor().getRut().equalsIgnoreCase(rut) && vehiculo.isMantenido() == false) {
+						System.out.println("Se ha eliminado el auto (PPU): "+vehiculo.getPpu());
+						vehiculos.remove(vehiculo);
+					   }
+				   }
+				
+				   System.out.printf("Se ha eliminado el cliente: %s %n%n", cli.getNombres());
+				   clientes.remove(cli);
+				   break;
+			}
+		}		
 	}
 	private static void agregarCliente() {
-         /**
-	 * 
-	 * Este metodo solicita informacion al usuario para crear registro 
-	 * 
-	 * 
-	 */
 		scanner.nextLine(); //ATAJA ERRORES
 		
 		//PIDE DATOS CLIENTE
-		System.out.println("Ingrese nombres del cliente");
-		String nombresCliente = scanner.nextLine();
-		
-		System.out.println("Ingrese apellidos del cliente");
-		String apellidosCliente = scanner.nextLine();
-		
 		System.out.println("Ingrese RUT del cliente");
 		String rutCliente = scanner.nextLine();
-		
-		System.out.println("Ingrese correo del cliente");
-		String correoCliente = scanner.nextLine();
+		//Busca al cliente con el rut proporcionado, si este existe en los registros, se salta el resto del metodo y pasa directo a añadir autos.
+				for(Cliente cli : clientes) {
+					if (cli.getRut().equalsIgnoreCase(rutCliente)) {
+						agregarVehiculos(cli);	
+						break;
+					}
+				}
+				System.out.println("Cliente no registrado. Ingrese datos del nuevo cliente.\n");
+				
+				System.out.println("Ingrese nombres del cliente");
+				String nombresCliente = scanner.nextLine();
+				
+				System.out.println("Ingrese apellidos del cliente");
+				String apellidosCliente = scanner.nextLine();
+					
+				System.out.println("Ingrese correo del cliente");
+				String correoCliente = scanner.nextLine();
 
-		System.out.println("Ingrese telefono del cliente");
-		String fonoCliente = scanner.nextLine();
+				System.out.println("Ingrese telefono del cliente");
+				String fonoCliente = scanner.nextLine();
 		
 		//CREACION CLIENTE CON DATOS PEDIDOS
 		Cliente cliente = new Cliente(nombresCliente,apellidosCliente,rutCliente,correoCliente,fonoCliente);
-		
-		
+		clientes.add(cliente);
+		agregarVehiculos(cliente);
+	}
 		//DATOS AUTO
 		// Se repite las veces que sea necesaria, segun la cantidad de autos del cliente
-			boolean agregarVehiculos = true;
-		
-		do {
-			System.out.println("Ingrese PATENTE del Vehiculo");
-			String ppuAuto = scanner.nextLine();
 			
-			System.out.println("Ingrese MARCA del Vehiculo");
-			String marcaAuto = scanner.nextLine();
-			
-			System.out.println("Ingrese MODELO del Vehiculo");
-			String modeloAuto = scanner.nextLine();
-			
-			System.out.println("Ingrese AÑO de Fabricacion del Vehiculo");
-			int yearAuto = scanner.nextInt();
-						
-			Vehiculo vehiculo = new Vehiculo(ppuAuto,marcaAuto,modeloAuto,LocalDate.of(yearAuto, 01, 01),cliente);
-			vehiculos.add(vehiculo); // AÑADE AL ARRAY PARA USO FUTURO
-			
-			scanner.nextLine(); // ATAJA ERRORES
-			
-			System.out.println("¿Desea seguir añadiendo Vehiculos? (si/no)");
-			String decision = scanner.nextLine();
-			
-			if(decision.equalsIgnoreCase("NO")) {
-				agregarVehiculos = false;
-				break;
-			}	
-		}while(agregarVehiculos);	
-	}
-		
+	private static void agregarVehiculos(Cliente cliente) {
+		//DATOS AUTO
+				// Se repite las veces que sea necesaria, segun la cantidad de autos del cliente
+				boolean agregarAutos = true;
+				try {
+				do {
+					System.out.println("Ingrese PPU del auto");
+					String ppuAuto = scanner.nextLine().toUpperCase();
+					
+					System.out.println("Ingrese marca del auto");
+					String marcaAuto = scanner.nextLine();
+					
+					System.out.println("Ingrese modelo del auto");
+					String modeloAuto = scanner.nextLine();
+					
+					System.out.println("Ingrese año de fabricacion del auto");
+					int yearAuto = scanner.nextInt();
+					if (yearAuto < 1960 || String.valueOf(yearAuto).length() > 4) {
+						throw new Exception("PARAMETROS INVALIDOS. INTENTE DE NUEVO");
+					}
+								
+					// Crea el objeto Auto con los datos proporcionados.
+					Vehiculo vehiculo = new Vehiculo(ppuAuto,marcaAuto,modeloAuto,LocalDate.of(yearAuto, 01, 01),agregarAutos, cliente);
+					vehiculos.add(vehiculo); // AÑADE AL ARRAY PARA USO FUTURO
+					cliente.addVehiculo(vehiculo); // AÑADE EL AUTO REGISTRADO AL CLIENTE
+					
+					scanner.nextLine(); // ATAJA ERRORES
+					
+					System.out.println("¿Desea seguir añadiendo autos? (si/no)");
+					String decision = scanner.nextLine();
+					
+					if(decision.equalsIgnoreCase("NO")) {
+						agregarAutos = false;
+						break;
+					}	
+				}while(agregarAutos);
+				}catch(Exception e) {
+					System.out.println("Parametros invalidos. Intente de nuevo");
+				}
+		}
 	}
 
