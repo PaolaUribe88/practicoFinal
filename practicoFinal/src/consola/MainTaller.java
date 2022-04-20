@@ -128,7 +128,7 @@ public class MainTaller {
 				// Declara un Auto como nulo para futura asignacion
 				Vehiculo vehiculoMantencion = null;
 				
-				// BUSCA EL AUTO SEGUN PPU EN ARRAYLIST autos, CUANDO LO ENCUENTRA, LO ASIGNA A VARIABLE ANTES DECLARADA (autoMantencion)
+				// BUSCA EL AUTO SEGUN PPU EN ARRAYLIST vehiculos, CUANDO LO ENCUENTRA, LO ASIGNA A VARIABLE ANTES DECLARADA (vehiculoMantencion)
 				for(Vehiculo vehiculo : vehiculos) {
 					if(ppuMantencion.equalsIgnoreCase(vehiculo.getPpu())) {
 						vehiculoMantencion = vehiculo;
@@ -152,7 +152,7 @@ public class MainTaller {
 			}
 	
 	private static void verRecaudacion() {
-		// Declara int para recaudaciones y autos mantenidos, aumentaran de valor por cada mantencion exitosa
+		// Declara int para recaudaciones y vehiculos mantenidos, aumentaran de valor por cada mantencion exitosa
 				int recaudaciones = 0;
 				int autosMantenidos = 0;
 				
@@ -163,9 +163,9 @@ public class MainTaller {
 				// Llama al metodo listarMantenciones para mostrar un listado de los autos a los que se les hizo mantencion
 				listaMantenciones();
 				System.out.printf("Recaudaciones totales: $%d%n "
-								+ "Autos mantenidos: %d %n%n",
+								+ "Vehiculos mantenidos: %d %n%n",
 								recaudaciones,
-								autosMantenidos);		
+								vehiculosMantenidos);		
 		}
 		
 	private static void listaMantenciones() {
@@ -173,7 +173,7 @@ public class MainTaller {
 		
 		// Por cada mantencion realizada, muestra los datos en la consola
 		for(Mantencion mantencion : mantenciones) {
-			System.out.println("PPU AUTO MANTENIDO: "+mantencion.getVehiculo().getPpu());
+			System.out.println("PPU VEHICULO MANTENIDO: "+mantencion.getVehiculo().getPpu());
 			System.out.println("DUEÑO DE AUTO MANTENIDO: "+mantencion.getVehiculo().getPoseedor().getNombres()+" "+mantencion.getVehiculo().getPoseedor().getApellidos());
 			System.out.println("TIPO MANTENCION: "+mantencion.getMantencionRealizada());
 			System.out.println("OBSERVACIONES: "+mantencion.getObservaciones());
@@ -196,7 +196,7 @@ public class MainTaller {
 				
 				   for (Vehiculo vehiculo : vehiculos) {
 					   if(vehiculo.getPoseedor().getRut().equalsIgnoreCase(rut) && vehiculo.isMantenido() == false) {
-						System.out.println("Se ha eliminado el auto (PPU): "+vehiculo.getPpu());
+						System.out.println("Se ha eliminado el vehiculo (PPU): "+vehiculo.getPpu());
 						vehiculos.remove(vehiculo);
 					   }
 				   }
@@ -213,7 +213,7 @@ public class MainTaller {
 		//PIDE DATOS CLIENTE
 		System.out.println("Ingrese RUT del cliente");
 		String rutCliente = scanner.nextLine();
-		//Busca al cliente con el rut proporcionado, si este existe en los registros, se salta el resto del metodo y pasa directo a añadir autos.
+		//Busca al cliente con el rut proporcionado, si este existe en los registros, se salta el resto del metodo y pasa directo a añadir vehiculos.
 				for(Cliente cli : clientes) {
 					if (cli.getRut().equalsIgnoreCase(rutCliente)) {
 						agregarVehiculos(cli);	
@@ -239,45 +239,45 @@ public class MainTaller {
 		clientes.add(cliente);
 		agregarVehiculos(cliente);
 	}
-		//DATOS AUTO
+		
 		// Se repite las veces que sea necesaria, segun la cantidad de autos del cliente
 			
 	private static void agregarVehiculos(Cliente cliente) {
-		//DATOS AUTO
+		//DATOS VEHICULO
 				// Se repite las veces que sea necesaria, segun la cantidad de autos del cliente
-				boolean agregarAutos = true;
+				boolean agregarVehiculos = true;
 				try {
 				do {
-					System.out.println("Ingrese PPU del auto");
-					String ppuAuto = scanner.nextLine().toUpperCase();
+					System.out.println("Ingrese PPU del vehiculo");
+					String ppuVehiculo = scanner.nextLine().toUpperCase();
 					
-					System.out.println("Ingrese marca del auto");
-					String marcaAuto = scanner.nextLine();
+					System.out.println("Ingrese marca del vehiculo");
+					String marcaVehiculo = scanner.nextLine();
 					
-					System.out.println("Ingrese modelo del auto");
-					String modeloAuto = scanner.nextLine();
+					System.out.println("Ingrese modelo del vehiculo");
+					String modeloVehiculo = scanner.nextLine();
 					
-					System.out.println("Ingrese año de fabricacion del auto");
-					int yearAuto = scanner.nextInt();
-					if (yearAuto < 1960 || String.valueOf(yearAuto).length() > 4) {
+					System.out.println("Ingrese año de fabricacion del vehiculo");
+					int yearVehiculo = scanner.nextInt();
+					if (yearVehiculo < 1960 || String.valueOf(yearVehiculo).length() > 4) {
 						throw new Exception("PARAMETROS INVALIDOS. INTENTE DE NUEVO");
 					}
 								
-					// Crea el objeto Auto con los datos proporcionados.
-					Vehiculo vehiculo = new Vehiculo(ppuAuto,marcaAuto,modeloAuto,LocalDate.of(yearAuto, 01, 01),agregarAutos, cliente);
+					// Crea el objeto Vehiculo con los datos proporcionados.
+					Vehiculo vehiculo = new Vehiculo(ppuVehiculo,marcaVehiculo,modeloVehiculo,LocalDate.of(yearVehiculo, 01, 01),agregarVehiculos, cliente);
 					vehiculos.add(vehiculo); // AÑADE AL ARRAY PARA USO FUTURO
-					cliente.addVehiculo(vehiculo); // AÑADE EL AUTO REGISTRADO AL CLIENTE
+					cliente.addVehiculo(vehiculo); // AÑADE EL VEHICULO REGISTRADO AL CLIENTE
 					
 					scanner.nextLine(); // ATAJA ERRORES
 					
-					System.out.println("¿Desea seguir añadiendo autos? (si/no)");
+					System.out.println("¿Desea seguir añadiendo vehiculos? (si/no)");
 					String decision = scanner.nextLine();
 					
 					if(decision.equalsIgnoreCase("NO")) {
-						agregarAutos = false;
+						agregarVehiculos = false;
 						break;
 					}	
-				}while(agregarAutos);
+				}while(agregarVehiculos);
 				}catch(Exception e) {
 					System.out.println("Parametros invalidos. Intente de nuevo");
 				}
